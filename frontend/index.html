@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List Dashboard</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Estilos de la aplicación -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-decorations">
+        <div class="circle circle-purple"></div>
+        <div class="circle circle-cyan"></div>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Encabezado de la Aplicación -->
+        <header class="app-header">
+            <div class="logo-area">
+                <span class="logo-icon">✓</span>
+                <h1>TaskFlow</h1>
+            </div>
+            <p class="subtitle">API REST Manager & To-Do List</p>
+        </header>
+
+        <!-- Sección de Estadísticas -->
+        <section class="stats-grid">
+            <div class="stat-card" id="stat-total">
+                <div class="stat-icon">📊</div>
+                <div class="stat-info">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Total de Tareas</span>
+                </div>
+            </div>
+            <div class="stat-card" id="stat-pending">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-info">
+                    <span class="stat-value" style="color: var(--accent-orange);">0</span>
+                    <span class="stat-label">Pendientes</span>
+                </div>
+            </div>
+            <div class="stat-card" id="stat-completed">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <span class="stat-value" style="color: var(--accent-green);">0</span>
+                    <span class="stat-label">Completadas</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contenedor Principal: Formulario y Lista -->
+        <main class="main-content">
+            <!-- Formulario para Crear Tarea -->
+            <section class="card form-section">
+                <h2>Crear Nueva Tarea</h2>
+                <form id="task-form">
+                    <div class="form-group">
+                        <label for="task-title">Título <span class="required">*</span></label>
+                        <input type="text" id="task-title" placeholder="¿Qué necesitas hacer hoy?" required maxlength="150">
+                    </div>
+                    <div class="form-group">
+                        <label for="task-description">Descripción</label>
+                        <textarea id="task-description" placeholder="Añade detalles a esta tarea (opcional)" rows="4" maxlength="1000"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="btn-submit">
+                        <span class="btn-text">Agregar Tarea</span>
+                        <span class="btn-loader" style="display: none;"></span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Listado de Tareas -->
+            <section class="card list-section">
+                <div class="list-header">
+                    <h2>Mis Tareas</h2>
+                    <button id="btn-refresh" class="btn btn-secondary" title="Actualizar lista">
+                        <svg class="refresh-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    </button>
+                </div>
+
+                <!-- Notificación de Alerta / Estado de Conexión -->
+                <div id="connection-alert" class="alert alert-error" style="display: none;">
+                    <strong>Error de Conexión:</strong> No se pudo conectar con el backend en <code>http://localhost:8080</code>. Asegúrate de tener Spring Boot encendido.
+                </div>
+
+                <div id="tasks-container">
+                    <!-- Estado de Carga (Loader) -->
+                    <div class="loader-container" id="list-loader" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Cargando tareas...</p>
+                    </div>
+
+                    <!-- Estado Vacío -->
+                    <div class="empty-state" id="empty-state">
+                        <div class="empty-icon">🍃</div>
+                        <h3>¡Todo al día!</h3>
+                        <p>No tienes tareas pendientes. Crea una nueva tarea para comenzar.</p>
+                    </div>
+
+                    <!-- Lista Real de Tareas (Renderizada por JS) -->
+                    <ul class="task-list" id="task-list" style="display: none;"></ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Script de Lógica -->
+    <script src="app.js"></script>
+</body>
+</html>
