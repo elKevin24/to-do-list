@@ -10,66 +10,40 @@ Actualmente, el repositorio cuenta con las siguientes implementaciones:
 
 | Proyecto | Tecnología Base | Persistencia | Mapeo / Validación | Estado |
 | :--- | :--- | :--- | :--- | :--- |
-| **[spring-boot](./spring-boot)** | Java 17 + Spring Boot 4.1.0 | H2 Database (JPA / Hibernate) | MapStruct / `@Valid` (Jakarta) | **Completado** ✅ |
+| **[springboot/backend](./springboot/backend)** | Java 17 + Spring Boot 4.1.0 | H2 Database (JPA / Hibernate) | MapStruct / `@Valid` (Jakarta) | **Completado** ✅ |
+| **[springboot/frontend](./springboot/frontend)** | HTML5 + CSS3 + JS (Nativo) | Spring Boot REST API | Fetch API | **Completado** ✅ |
 | **[node-express](./node-express)** | Node.js + Express | Memory DB / Custom | Custom | **En Progreso** 🛠️ |
 | **[nestjs](./nestjs)** | TypeScript + NestJS | Memory / TypeORM | Custom DTOs / Class-Validator | **En Progreso** 🛠️ |
 
 ---
 
-## ☕ 1. Implementación en Java & Spring Boot
+## ☕ 1. Implementación en Java & Spring Boot (con Frontend integrado)
 
-Ubicada en la carpeta `/spring-boot`, esta implementación sigue la **Arquitectura en 3 Capas** (Controlador, Servicio y Repositorio) aplicando inyección de dependencias, Clean Code y tipado estático.
+Ubicada en la carpeta `/springboot`, esta implementación separa claramente el cliente (Frontend) y el servidor (Backend).
 
-### Tecnologías Utilizadas
-*   **Java 17 (LTS)**
-*   **Spring Boot 4.1.0 (LTS)** (incluye Spring Web, Spring Data JPA)
-*   **H2 Database** (Base de datos relacional en memoria)
-*   **Lombok** (Generación automática de getters, setters, constructores y builder)
-*   **MapStruct 1.5.5.Final** (Mapeo automático entre entidades JPA y DTOs)
-*   **Springdoc OpenAPI 3.0.3** (Documentación interactiva de Swagger UI)
+### A. Backend (`/springboot/backend`)
+Sigue la **Arquitectura en 3 Capas** (Controlador, Servicio y Repositorio) aplicando inyección de dependencias, Clean Code y tipado estático.
 
-### Estructura de Paquetes
-```text
-spring-boot/src/main/java/com/app/todo/
-├── config/              # Configuración de Swagger/OpenAPI
-├── controller/          # Capa Web (Endpoints HTTP, validación @Valid)
-├── dto/                 # Capa de Intercambio (DTOs de Petición y Respuesta)
-├── exception/           # Manejador global de excepciones (@ControllerAdvice)
-├── mapper/              # Mapeo de objetos con MapStruct
-├── model/               # Capa de Datos (Entidad JPA)
-├── repository/          # Capa de Acceso a Datos (Spring Data JPA)
-└── service/             # Capa de Negocio (Interfaces e Implementación)
-```
-
-### Endpoints de la API (RESTful)
-Todos los endpoints están bajo el prefijo `/api/tasks`:
-
-*   `GET /api/tasks` - Obtiene la lista completa de tareas.
-*   `GET /api/tasks/{id}` - Obtiene los detalles de una tarea específica. Lanzará `404 Not Found` si no existe.
-*   `POST /api/tasks` - Crea una tarea. Requiere un JSON con `title` (obligatorio, máx 150 caracteres). Retorna `201 Created`.
-*   `PUT /api/tasks/{id}` - Actualiza el título, descripción o estado (`completed`) de una tarea.
-*   `DELETE /api/tasks/{id}` - Elimina una tarea permanentemente. Retorna `204 No Content`.
-
-### Cómo Ejecutar y Probar el Proyecto Spring Boot
-
-1.  **Requisitos:** Tener instalado **JDK 17** y Maven (opcional, se incluye Maven Wrapper).
-2.  **Iniciar la Aplicación:**
-    Abre la terminal en la carpeta `/spring-boot` y ejecuta:
+*   **Tecnologías:** Java 17 (LTS), Spring Boot 4.1.0, H2 Database, Lombok, MapStruct, Springdoc OpenAPI (Swagger UI).
+*   **Cómo ejecutar el Backend:**
+    Abre la terminal en la carpeta `springboot/backend` y ejecuta:
     ```bash
     .\mvnw spring-boot:run
     ```
-3.  **Acceso a la Consola H2:**
-    Visualiza las tablas de la base de datos en tiempo real en:
-    *   **URL:** `http://localhost:8080/h2-console`
-    *   **JDBC URL:** `jdbc:h2:mem:todolistdb`
-    *   **User:** `sa` (sin contraseña)
-4.  **Acceso a la Documentación Interactiva (Swagger UI):**
-    Prueba los endpoints directamente desde tu navegador en:
-    *   `http://localhost:8080/swagger-ui.html`
-5.  **Ejecutar Pruebas Unitarias (JUnit 5 + Mockito + MockMvc):**
+    *   **Consola H2:** `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:mem:todolistdb`, usuario `sa` sin contraseña).
+    *   **Documentación Swagger UI:** `http://localhost:8080/swagger-ui.html`
+
+### B. Frontend (`/springboot/frontend`)
+Una interfaz web interactiva con tema oscuro y Glassmorphism que consume el Backend en tiempo real.
+
+*   **Tecnologías:** HTML5 semántico, Vanilla CSS3 (diseño responsivo, variables HSL, animaciones), JavaScript nativo (Fetch API, manipulación asíncrona del DOM).
+*   **Cómo ejecutar el Frontend:**
+    Puedes abrir el archivo `index.html` directamente en tu navegador, o servirlo con un servidor web simple (por ejemplo, con Node.js en el puerto 3001):
+    Abre la terminal en la carpeta `springboot/frontend` y ejecuta:
     ```bash
-    .\mvnw test
+    npx -y http-server -p 3001
     ```
+    Y entra a: `http://localhost:3001`
 
 ---
 
@@ -85,4 +59,4 @@ Este repositorio incluye implementaciones en Node.js (Express) y NestJS para com
 *   **Separación de DTOs y Entidades:** Protege la base de datos de inyecciones maliciosas y oculta propiedades internas del sistema.
 *   **Manejo Global de Excepciones:** Respuestas JSON estandarizadas en caso de errores en la API (ej: campos de entrada inválidos, recursos no encontrados).
 *   **Pruebas Automatizadas:** Cobertura de pruebas unitarias tanto para la lógica de negocio (`Service`) como para la capa de presentación web (`MockMvc` en los controladores).
-*   **Documentación Automatizada:** Especficación OpenAPI disponible inmediatamente para su integración con el frontend.
+*   **Documentación Automatizada:** Especificación OpenAPI disponible inmediatamente para su integración con el frontend.
