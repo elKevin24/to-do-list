@@ -1,5 +1,13 @@
-// CONFIGURACIÓN DE LA API BACKEND (SPRING BOOT)
-const API_URL = 'http://localhost:8080/api/tasks';
+// CONFIGURACIÓN DE MULTI-BACKEND
+const BACKENDS = {
+    springboot: { name: 'Spring Boot (Java)', url: 'http://localhost:8080/api/tasks' },
+    express: { name: 'Express (Node.js)', url: 'http://localhost:3000/tasks' },
+    nestjs: { name: 'NestJS (TypeScript)', url: 'http://localhost:3001/tasks' }
+};
+
+// ESTADO ACTIVO
+let currentBackendKey = localStorage.getItem('selectedBackend') || 'springboot';
+let API_URL = BACKENDS[currentBackendKey].url;
 
 // ELEMENTOS DEL DOM
 const taskForm = document.getElementById('task-form');
@@ -11,6 +19,7 @@ const listLoader = document.getElementById('list-loader');
 const connectionAlert = document.getElementById('connection-alert');
 const btnSubmit = document.getElementById('btn-submit');
 const btnRefresh = document.getElementById('btn-refresh');
+const backendSelect = document.getElementById('backend-select');
 
 // ELEMENTOS DE ESTADÍSTICAS
 const statTotalVal = document.querySelector('#stat-total .stat-value');
@@ -22,13 +31,27 @@ let tasks = [];
 
 // INICIALIZACIÓN
 document.addEventListener('DOMContentLoaded', () => {
+    // Configurar selector con el backend persistido
+    backendSelect.value = currentBackendKey;
+
+    // Escanear servidores e iniciar carga de tareas
+    scanAllServers();
     fetchTasks();
 
-    // Evento del formulario (Creación de Tarea)
+    // Eventos
     taskForm.addEventListener('submit', handleCreateTask);
+    btnRefresh.addEventListener('click', () => {
+        scanAllServers();
+        fetchTasks();
+    });
 
-    // Evento del botón refrescar
-    btnRefresh.addEventListener('click', fetchTasks);
+    // Evento de cambio de backend
+    backendSelect.addEventListener('change', (e) => {
+        currentBackendKey = e.target.value;
+        localStorage.setItem('selectedBackend', currentBackendKey);
+        API_URL = BACKENDS[currentBackendKey].url;
+        fetchTasks();
+    });
 });
 
 // OBTENER TODAS LAS TAREAS (GET)
@@ -276,11 +299,42 @@ function setSubmitLoading(loading) {
 }
 
 function showConnectionAlert() {
+    connectionAlert.innerHTML = `<strong>Error de Conexión:</strong> No se pudo establecer conexión con el backend de <strong>${BACKENDS[currentBackendKey].name}</strong> en <code>${API_URL}</code>. Asegúrate de tener este servidor encendido.`;
     connectionAlert.style.display = 'block';
 }
 
 function hideConnectionAlert() {
     connectionAlert.style.display = 'none';
+}
+
+// ESCANEO Y SALUD DE LOS SERVIDORES (ONLINE/OFFLINE)
+async function checkServerStatus(url) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), 1200); // 1.2 segundos de timeout
+    try {
+        const response = await fetch(url, { method: 'GET', signal: controller.signal });
+        clearTimeout(id);
+        // Si responde, el servidor está arriba (sea cual sea el status HTTP, por ejemplo 404, 200, 400)
+        return true;
+    } catch (err) {
+        return false;
+    }
+}
+
+async function scanAllServers() {
+    for (const [key, backend] of Object.entries(BACKENDS)) {
+        const isOnline = await checkServerStatus(backend.url);
+        const pill = document.getElementById(`status-${key}`);
+        if (pill) {
+            if (isOnline) {
+                pill.classList.remove('offline');
+                pill.classList.add('online');
+            } else {
+                pill.classList.remove('online');
+                pill.classList.add('offline');
+            }
+        }
+    }
 }
 
 // Dar formato legible a la fecha
