@@ -25,13 +25,16 @@
                     <span class="logo-icon">✓</span>
                     <h1>TaskFlow</h1>
                 </div>
-                <!-- Selector de Backend -->
+                <!-- Selector de Backend y Benchmark -->
                 <div class="backend-selector-group">
+                    <button id="btn-benchmark" class="btn btn-benchmark" title="Correr Benchmark a todos los servidores">🚀 Speed Test</button>
                     <div class="select-wrapper">
                         <select id="backend-select" class="backend-select">
                             <option value="springboot">☕ Spring Boot (Java)</option>
                             <option value="express">⚡ Node + Express (JS)</option>
                             <option value="nestjs">🦁 NestJS (TypeScript)</option>
+                            <option value="fastapi">🐍 Python FastAPI</option>
+                            <option value="go">🐹 Go Fiber</option>
                         </select>
                     </div>
                 </div>
@@ -42,6 +45,8 @@
                     <span class="status-pill" id="status-springboot"><span class="dot"></span> Spring Boot: 8080</span>
                     <span class="status-pill" id="status-express"><span class="dot"></span> Express: 3000</span>
                     <span class="status-pill" id="status-nestjs"><span class="dot"></span> NestJS: 3001</span>
+                    <span class="status-pill" id="status-fastapi"><span class="dot"></span> FastAPI: 8000</span>
+                    <span class="status-pill" id="status-go"><span class="dot"></span> Go Fiber: 5000</span>
                 </div>
             </div>
         </header>
@@ -127,7 +132,29 @@
         </main>
     </div>
 
+    <!-- Modal de Benchmark (Leaderboard) -->
+    <div id="benchmark-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🏆 Benchmark Leaderboard</h2>
+                <button id="btn-close-modal" class="btn-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Midiendo tiempos de lectura, creación (20 tareas) y borrado concurrente en todos los backends online...</p>
+                
+                <div class="benchmark-controls">
+                    <button id="btn-start-race" class="btn btn-primary">🏁 Iniciar Carrera</button>
+                </div>
+
+                <div id="benchmark-results" class="benchmark-results">
+                    <!-- Las barras de progreso y resultados se inyectarán aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Script de Lógica -->
     <script src="app.js"></script>
+    <script src="benchmark.js"></script>
 </body>
 </html>

@@ -1,62 +1,90 @@
-# Polyglot To-Do List API REST 🚀
+# Polyglot To-Do List API REST & Unified Frontend 🚀
 
-Este repositorio contiene implementaciones de una **API REST de To-Do List** construida bajo altos estándares de desarrollo, buenas prácticas de diseño de software y utilizando diferentes stacks tecnológicos para comparar su arquitectura, sintaxis y rendimiento.
+Este repositorio contiene implementaciones de una **API REST de To-Do List** construida bajo altos estándares de desarrollo en **5 lenguajes/frameworks diferentes**. Todas las APIs comparten la misma estructura de datos, respuestas y validaciones, lo que permite que sean consumidas por un único **Frontend Unificado**.
+
+Además, el Frontend incluye un módulo de **Speed Test (Benchmark)** concurrente para poner a prueba el rendimiento real de cada lenguaje (Lectura, Escritura y Borrado bajo estrés) en tiempo real. 🏎️
 
 ---
 
 ## 🛠️ Ecosistema del Proyecto
 
-Actualmente, el repositorio cuenta con las siguientes implementaciones:
-
-| Proyecto | Tecnología Base | Persistencia | Mapeo / Validación | Estado |
-| :--- | :--- | :--- | :--- | :--- |
-| **[springboot/backend](./springboot/backend)** | Java 17 + Spring Boot 4.1.0 | H2 Database (JPA / Hibernate) | MapStruct / `@Valid` (Jakarta) | **Completado** ✅ |
-| **[springboot/frontend](./springboot/frontend)** | HTML5 + CSS3 + JS (Nativo) | Spring Boot REST API | Fetch API | **Completado** ✅ |
-| **[node-express](./node-express)** | Node.js + Express | Memory DB / Custom | Custom | **En Progreso** 🛠️ |
-| **[nestjs](./nestjs)** | TypeScript + NestJS | Memory / TypeORM | Custom DTOs / Class-Validator | **En Progreso** 🛠️ |
-
----
-
-## ☕ 1. Implementación en Java & Spring Boot (con Frontend integrado)
-
-Ubicada en la carpeta `/springboot`, esta implementación separa claramente el cliente (Frontend) y el servidor (Backend).
-
-### A. Backend (`/springboot/backend`)
-Sigue la **Arquitectura en 3 Capas** (Controlador, Servicio y Repositorio) aplicando inyección de dependencias, Clean Code y tipado estático.
-
-*   **Tecnologías:** Java 17 (LTS), Spring Boot 4.1.0, H2 Database, Lombok, MapStruct, Springdoc OpenAPI (Swagger UI).
-*   **Cómo ejecutar el Backend:**
-    Abre la terminal en la carpeta `springboot/backend` y ejecuta:
-    ```bash
-    .\mvnw spring-boot:run
-    ```
-    *   **Consola H2:** `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:mem:todolistdb`, usuario `sa` sin contraseña).
-    *   **Documentación Swagger UI:** `http://localhost:8080/swagger-ui.html`
-
-### B. Frontend (`/springboot/frontend`)
-Una interfaz web interactiva con tema oscuro y Glassmorphism que consume el Backend en tiempo real.
-
-*   **Tecnologías:** HTML5 semántico, Vanilla CSS3 (diseño responsivo, variables HSL, animaciones), JavaScript nativo (Fetch API, manipulación asíncrona del DOM).
-*   **Cómo ejecutar el Frontend:**
-    Puedes abrir el archivo `index.html` directamente en tu navegador, o servirlo con un servidor web simple (por ejemplo, con Node.js en el puerto 3001):
-    Abre la terminal en la carpeta `springboot/frontend` y ejecuta:
-    ```bash
-    npx -y http-server -p 3001
-    ```
-    Y entra a: `http://localhost:3001`
+| Proyecto | Tecnología Base | Puerto por defecto | Estado |
+| :--- | :--- | :--- | :--- |
+| **[springboot](./springboot/backend)** | Java 17 + Spring Boot | `8080` | **Completado** ✅ |
+| **[node-express](./node-express)** | Node.js + Express | `3000` | **Completado** ✅ |
+| **[nestjs](./nestjs)** | TypeScript + NestJS | `3001` | **Completado** ✅ |
+| **[python-fastapi](./python-fastapi)** | Python 3 + FastAPI | `8000` | **Completado** ✅ |
+| **[go-fiber](./go-fiber)** | Go + Fiber | `5000` | **Completado** ✅ |
+| **[frontend](./frontend)** | HTML5/CSS3/JS (Vanilla) | `3002` (Recomendado) | **Completado** ✅ |
 
 ---
 
-## ⚡ 2. Otras Implementaciones (Node.js & NestJS)
-Este repositorio incluye implementaciones en Node.js (Express) y NestJS para comparar la velocidad de desarrollo y la arquitectura de Spring Boot frente al ecosistema de JavaScript/TypeScript.
+## 💻 Instrucciones de Despliegue (Cómo levantar todo)
 
-*   Para ver los detalles del desarrollo en Express, dirígete a la carpeta `/node-express`.
-*   Para la implementación en NestJS, consulta la carpeta `/nestjs`.
+Puedes encender uno, varios o todos los servidores al mismo tiempo (usando terminales separadas). El frontend detectará cuáles están encendidos automáticamente y los conectará a la herramienta de Benchmark.
+
+### 🌐 1. Levantar el Frontend Unificado (Web UI)
+El frontend se conecta a todos los puertos configurados.
+Abre una terminal en la raíz del proyecto y ejecuta:
+```bash
+npx -y http-server frontend -p 3002
+```
+*➡️ Entra a [http://localhost:3002](http://localhost:3002)*
 
 ---
 
-## 🌟 Buenas Prácticas Aplicadas
-*   **Separación de DTOs y Entidades:** Protege la base de datos de inyecciones maliciosas y oculta propiedades internas del sistema.
-*   **Manejo Global de Excepciones:** Respuestas JSON estandarizadas en caso de errores en la API (ej: campos de entrada inválidos, recursos no encontrados).
-*   **Pruebas Automatizadas:** Cobertura de pruebas unitarias tanto para la lógica de negocio (`Service`) como para la capa de presentación web (`MockMvc` en los controladores).
-*   **Documentación Automatizada:** Especificación OpenAPI disponible inmediatamente para su integración con el frontend.
+### ☕ 2. Spring Boot (Java) - Puerto 8080
+Abre una terminal en `springboot/backend` y ejecuta:
+```bash
+# Windows
+.\mvnw spring-boot:run
+# Mac/Linux
+./mvnw spring-boot:run
+```
+
+### ⚡ 3. Node.js (Express) - Puerto 3000
+Abre una terminal en `node-express` y ejecuta:
+```bash
+npm install
+npm run dev
+```
+
+### 🦁 4. NestJS (TypeScript) - Puerto 3001
+Abre una terminal en `nestjs` y ejecuta:
+```bash
+npm install
+npm run start:dev
+```
+
+### 🐍 5. Python (FastAPI) - Puerto 8000
+Abre una terminal en `python-fastapi` y ejecuta:
+```bash
+pip install -r requirements.txt
+python -m uvicorn main:app --port 8000 --reload
+# O simplemente: uvicorn main:app --port 8000 --reload
+```
+
+### 🐹 6. Go (Fiber) - Puerto 5000
+Abre una terminal en `go-fiber` y ejecuta:
+```bash
+go mod tidy
+go run main.go
+```
+
+---
+
+## 🏆 Benchmark & Speed Test
+
+Dentro del Frontend Unificado encontrarás un botón **🚀 Speed Test**. Si enciendes más de un servidor y ejecutas la prueba, el script disparará múltiples peticiones concurrentes a cada lenguaje de programación.
+
+* **Fase 1:** Ping inicial.
+* **Fase 2:** Inserción (`POST`) de 20 tareas en paralelo.
+* **Fase 3:** Borrado (`DELETE`) de las 20 tareas en paralelo.
+* **Resultado:** Un "Leaderboard" (Ranking) ordenando de menor a mayor los milisegundos que le tomó a cada tecnología soportar la carga. ¡Descubre qué framework domina el ecosistema!
+
+---
+
+## 🌟 Buenas Prácticas Aplicadas Transversalmente
+* **Consistencia de Respuestas:** Todos los lenguajes serializan sus errores bajo el mismo objeto JSON (`validationErrors`) en camelCase.
+* **Persistencia Integrada:** Todos utilizan bases de datos locales (H2 o SQLite) con sus respectivos ORMs (Hibernate, GORM, SQLAlchemy, etc).
+* **Cross-Origin (CORS) estricto:** Ajustado a nivel aplicación y middleware en todos los frameworks para interoperabilidad segura con el panel JS del frontend.

@@ -2,7 +2,9 @@
 const BACKENDS = {
     springboot: { name: 'Spring Boot (Java)', url: 'http://localhost:8080/api/tasks' },
     express: { name: 'Express (Node.js)', url: 'http://localhost:3000/tasks' },
-    nestjs: { name: 'NestJS (TypeScript)', url: 'http://localhost:3001/tasks' }
+    nestjs: { name: 'NestJS (TypeScript)', url: 'http://localhost:3001/tasks' },
+    fastapi: { name: 'Python (FastAPI)', url: 'http://localhost:8000/tasks' },
+    go: { name: 'Go (Fiber)', url: 'http://localhost:5000/tasks' }
 };
 
 // ESTADO ACTIVO
