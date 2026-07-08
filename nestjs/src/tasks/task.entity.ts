@@ -3,19 +3,19 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 @Entity('tasks')
 export class Task {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ nullable: false })
-  title: string;
+  title!: string;
 
   @Column({ type: 'text', nullable: true })
   description?: string;
 
   @Column({ default: false })
-  completed: boolean;
+  completed!: boolean;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at', nullable: true })
   updatedAt?: Date;

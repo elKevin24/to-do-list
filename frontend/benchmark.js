@@ -106,8 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ordenamos por tiempo de menor a mayor
         results.sort((a, b) => a.time - b.time);
 
-        // Determinamos el tiempo máximo (excluyendo offline) para el ancho de la barra
+        // Determinamos el tiempo MÍNIMO y MÁXIMO (excluyendo offline) para calcular colores y anchos
         const validTimes = results.filter(r => r.status === 'success').map(r => r.time);
+        const minTime = validTimes.length > 0 ? Math.min(...validTimes) : 100;
         const maxTime = validTimes.length > 0 ? Math.max(...validTimes) : 1000;
 
         resultsContainer.innerHTML = '';
@@ -119,15 +120,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const timeDisplay = isOffline ? 'OFFLINE' : `${res.time} ms`;
             const medal = isOffline ? '❌' : (medals[index] || '');
             
-            // Calculamos el ancho de la barra (el más lento tiene la barra más ancha)
+            // Calculamos el ancho de la barra: 100% para el más lento (barra larga = tomó más tiempo)
             const width = isOffline ? 0 : Math.max(5, (res.time / maxTime) * 100);
             
-            // Colores especiales: Oro para el 1er lugar
+            // Calculamos el color (Hue): 120 (Verde) para el minTime, 0 (Rojo) para el maxTime
+            const colorValue = maxTime === minTime ? 0 : (res.time - minTime) / (maxTime - minTime);
+            const hue = 120 - (colorValue * 120);
+            
+            // Inicializamos la barra en 0% de ancho para que la animación funcione.
             const barStyle = isOffline 
                 ? 'background: transparent;' 
-                : (index === 0 && !isOffline 
-                    ? `width: ${width}%; background: linear-gradient(90deg, #ffd700, #ff8c00);` 
-                    : `width: ${width}%;`);
+                : `width: 0%; background: hsl(${hue}, 80%, 50%); box-shadow: 0 0 8px hsla(${hue}, 80%, 50%, 0.5); border-radius: 4px;`;
 
             const row = document.createElement('div');
             row.className = 'result-row';

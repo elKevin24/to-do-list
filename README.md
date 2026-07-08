@@ -59,7 +59,7 @@ npm run start:dev
 ### 🐍 5. Python (FastAPI) - Puerto 8000
 Abre una terminal en `python-fastapi` y ejecuta:
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 python -m uvicorn main:app --port 8000 --reload
 # O simplemente: uvicorn main:app --port 8000 --reload
 ```

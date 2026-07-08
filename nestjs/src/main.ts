@@ -13,7 +13,7 @@ async function bootstrap() {
     whitelist: true, 
     transform: true,
     exceptionFactory: (errors) => {
-      const result = {};
+      const result: Record<string, string> = {};
       errors.forEach(err => {
         const constraints = Object.values(err.constraints || {});
         result[err.property] = constraints.length > 0 ? constraints[0] : 'Invalid value';
